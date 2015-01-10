@@ -1,6 +1,6 @@
-# mojio-clj
+# hack-the-ride
 
-A Clojure library for the moj.io API.
+A Clojure library for BMW Hack the Drive 
 
 ## Usage
 

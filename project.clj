@@ -1,4 +1,4 @@
-(defproject mojio-clj "0.1.0-SNAPSHOT"
+(defproject hack-the-ride "0.1.0-SNAPSHOT"
   :description "BMW Hack The Drive"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
