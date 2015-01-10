@@ -51,8 +51,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; VEHICLES
 
+;; ## fix
+
 (defn all-vehicles [& {:keys [] :as params}]
   (get-data "" params))
+
+; (all-vehicles)
 
 (defn vehicle [vin]
   (get-vin-json ":vin/" vin))

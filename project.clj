@@ -1,6 +1,6 @@
-(defproject hack-the-ride "0.1.0-SNAPSHOT"
+(defproject hack-the-drive "0.1.0-SNAPSHOT"
   :description "BMW Hack The Drive"
-  :url "http://example.com/FIXME"
+  :url "http://docs.hackthedrive.com/"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.6.0"]
@@ -16,4 +16,5 @@
   	    [environ/environ.lein "0.2.1"]]
   :hooks [environ.leiningen.hooks]
   :min-lein-version "2.0.0"
+  :profiles {:production {:env {:production true}}}
 )

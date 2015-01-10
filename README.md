@@ -1,6 +1,7 @@
-# hack-the-ride
+# hack-the-drive
 
-A Clojure library for BMW Hack the Drive 
+A Clojure library for BMW Hack the Drive
+http://docs.hackthedrive.com/
 
 ## Usage
 
