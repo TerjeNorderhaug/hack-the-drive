@@ -58,17 +58,19 @@
               bytes (or (:bytes content)
                         (if (get content :tempfile)
                           (IOUtils/toByteArray (io/input-stream (get content :tempfile)))))
-              id (store-media
+              data
                   (merge
                    {:bytes bytes}
                    (vehicle-details (get params "vehicle")) 
                    (if bytes {:intensity (thermal-intensity (image-from-bytes bytes) 20)})
                    (assoc content
-                          :vehicle (get params "vehicle"))))]
+                          :vehicle (get params "vehicle")))
+           ;   id (store-media data)
+          ]
           ; (render (success))
           ; (resp/redirect  (clojure.string/replace "/media/:id" #":id" (str id)))))
            ; (resp/redirect "/grid")
-          {:status 200 :headers {"Content-Type" "text/plain"} :body (pr-str params)}))
+          {:status 200 :headers {"Content-Type" "text/plain"} :body (pr-str data)}))
         {:store (byte-array-store)})
   (GET "/media/:id" [id]
     (render-media-response 
