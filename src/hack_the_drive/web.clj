@@ -54,14 +54,15 @@
                        (car/all-vehicles))))
   (mp/wrap-multipart-params
      (POST "/capture" {params :params} 
-        (let [content (get params "image")
+        (let [content (get params :image)
               bytes (or (:bytes content)
-                        (if (get content "tempfile")
-                          (IOUtils/toByteArray (io/input-stream (get content "tempfile")))))
+                        (if (get content :tempfile)
+                          (IOUtils/toByteArray (io/input-stream (get content :tempfile)))))
               id (store-media
-                  (merge 
+                  (merge
+                   {:bytes bytes}
                    (vehicle-details (get params "vehicle")) 
-       ;           ; (if bytes {:intensity (thermal-intensity (image-from-bytes bytes) 20)})
+                   (if bytes {:intensity (thermal-intensity (image-from-bytes bytes) 20)})
                    (assoc content
                           :vehicle (get params "vehicle"))))]
           ; (render (success))
