@@ -56,7 +56,8 @@
      (POST "/capture" {params :params} 
         (let [content (get params "image")
               bytes (or (:bytes content)
-                        (IOUtils/toByteArray (io/input-stream (:tempfile content))))
+                        (if (get content "tempfile")
+                          (IOUtils/toByteArray (io/input-stream (get content "tempfile")))))
               id (store-media
                   (merge 
                    (vehicle-details (get params "vehicle")) 
