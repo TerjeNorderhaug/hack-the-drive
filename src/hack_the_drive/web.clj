@@ -52,19 +52,19 @@
                        (car/all-vehicles))))
   (mp/wrap-multipart-params
     (POST "/capture" {params :params} 
-        (let [content (get params "file")
+        (let [content (get params "image")
               bytes (:bytes bytes)
               id (store-media
                   (merge 
                    (vehicle-details (get params "vehicle")) 
-                  ; (if bytes {:intensity (thermal-intensity (image-from-bytes bytes) 20)})
+       ;           ; (if bytes {:intensity (thermal-intensity (image-from-bytes bytes) 20)})
                    (assoc content
                           :vehicle (get params "vehicle"))))]
           ; (render (success))
           ; (resp/redirect  (clojure.string/replace "/media/:id" #":id" (str id)))))
            ; (resp/redirect "/grid")
           {:status 200 :headers {"Content-Type" "text/plain"} :body (pr-str params)}))
-    {:store (byte-array-store)})
+     {:store (byte-array-store)})
   (GET "/media/:id" [id]
     (render-media-response 
      (retrieve-media id)))
