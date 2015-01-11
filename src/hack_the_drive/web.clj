@@ -39,7 +39,10 @@
 ; (render-media-response (retrieve-media "54b1fab703642f60fb7a441a"))
 
 (defroutes app
-  (GET  "/" [] (render (index)))
+  (GET  "/" [] 
+    (render (index)))
+  (GET "/watch" [] 
+    (render (watch-demo)))
   (mp/wrap-multipart-params
     (POST "/capture" {params :params} 
         (let [id (store-media (get params "file"))]
