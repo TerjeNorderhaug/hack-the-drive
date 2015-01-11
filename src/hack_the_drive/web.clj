@@ -40,7 +40,7 @@
 
 (defn get-current-temperature [vehicle]
   (let [vehicle (first (mojio/all-vehicles))]
-    nil))   
+    {:temperature (or (:temperature vehicle) "70")}))
 
 (defroutes app
   (GET  "/" [] 
@@ -62,6 +62,7 @@
                 (dissoc
                   (merge
                    {:bytes bytes}
+                   (get-current-temperature)
                    (vehicle-details (get params "vehicle")) 
                    (if bytes {:intensity (thermal-intensity (image-from-bytes bytes) 20)})
                    (assoc content
