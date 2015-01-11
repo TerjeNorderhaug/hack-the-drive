@@ -66,7 +66,7 @@
            ; (resp/redirect "/grid")
           {:status 200 :headers {"Content-Type" "text/plain"} :body (pr-str params)}))
        wrap-params
-       (mp/wrap-multipart-params) ; {:store (byte-array-store)})
+       (mp/wrap-multipart-params {:store byte-array-store})
        )
   (GET "/media/:id" [id]
     (render-media-response 
