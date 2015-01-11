@@ -10,6 +10,7 @@
             [monger.util :refer [get-id]]
             [environ.core :refer [env]]
             [hack-the-drive.api.bmwcar :as car]
+            [hack-the-drive.mojio.api :as mojio]
             [hack-the-drive.view.views :refer [index-view watch-view]]
             [hack-the-drive.storage :as storage :refer [store-media retrieve-media retrieve-data]]
             [hack-the-drive.capture :refer [capture-vehicle vehicle-details]]
@@ -35,6 +36,10 @@
 ; (:bytes (retrieve-media "54b1fab703642f60fb7a441a"))
 ; (render-media-response (retrieve-media "54b1fab703642f60fb7a441a"))
 
+(defn get-current-temperature [vehicle]
+  (let [vehicle (first (mojio/all-vehicles))]
+    nil))   
+
 (defroutes app
   (GET  "/" [] 
     (render (index-view)))
@@ -48,10 +53,11 @@
   (mp/wrap-multipart-params
     (POST "/capture" {params :params} 
         (let [content (get params "file")
+              bytes (get content "bytes")
               id (store-media
                   (merge 
-                   (vehicle-details (get params "vehicle"))
-                   {:intensity (thermal-intensity (image-from-bytes (:bytes content)) 20)}
+                   (vehicle-details (get params "vehicle")) 
+                   {:intensity (thermal-intensity (image-from-bytes bytes) 20)}
                    (assoc content
                           :vehicle (get params "vehicle"))))]
           ; (render (success))
