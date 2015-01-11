@@ -1,4 +1,4 @@
-(ns  hack_the_drive.mojio.api
+(ns  hack-the-drive.mojio.api
   (require 
     [clj-http.client :as client]
     [cheshire.core :as json]
