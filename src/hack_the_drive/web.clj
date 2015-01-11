@@ -44,7 +44,7 @@
 
 (defroutes app
   (GET  "/" [] 
-    (render (index-view)))
+    (resp/redirect "/grid"))
   (GET "/watch" [] 
     (render (watch-view)))
   (GET "/grid" []
