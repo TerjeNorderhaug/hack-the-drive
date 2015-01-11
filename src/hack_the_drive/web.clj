@@ -63,7 +63,7 @@
           ; (render (success))
           ; (resp/redirect  (clojure.string/replace "/media/:id" #":id" (str id)))))
            ; (resp/redirect "/grid")
-            (str content))))
+            (str content)))
     {:store (byte-array-store)})
   (GET "/media/:id" [id]
     (render-media-response 
