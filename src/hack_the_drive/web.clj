@@ -25,6 +25,8 @@
 
 (deftemplate upload-success "success.html" [])
 
+(deftemplate watch-demo "watch.html" [])
+
 (defn render-media-response [record]
     (-> (resp/response (new java.io.ByteArrayInputStream (:bytes record))) ; (java.io.ByteArrayInputStream. 
         (resp/content-type (:content-type record))
