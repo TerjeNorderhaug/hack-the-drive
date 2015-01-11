@@ -95,6 +95,16 @@
 ;;; ETC - many more!
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; TRIPS
+
+(defn all-trips [& {:keys [sort-by desc criteria] :as params}]
+  (get-data "Trips" params))
+
+; (all-trips)
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EVENTS
 
 (defn all-events [& {:keys [sort-by desc criteria] :as params}]
@@ -103,6 +113,18 @@
 ; (all-events)
 
 ;;; ETC - many more!
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; VEHICLES
+
+(defn all-vehicles [& {:keys [sort-by desc criteria] :as params}]
+  (get-data "Vehicles" params))
+
+; (count (all-vehicles))
+
+
+
+
 
 
   
