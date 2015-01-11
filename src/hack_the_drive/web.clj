@@ -10,6 +10,7 @@
             [monger.util :refer [get-id]]
             [environ.core :refer [env]]
             [net.cgrand.enlive-html :refer [deftemplate]]
+            [hack-the-drive.storage :refer [store-media retrieve-media]]
             [hack-the-drive.capture :refer [store-media retrieve-media]]))
 
 (defn splash []
@@ -46,6 +47,8 @@
   (GET "/media/:id" [id]
     (render-media-response 
      (retrieve-media id)))
+  (GET "/vehicle/:id/capture" [id]
+     (capture-vehicle id))
   (ANY "*" []
        (route/not-found (slurp (io/resource "404.html")))))
 

@@ -38,7 +38,7 @@
        {:headers {"Content-Type" "application/json"}
         :body (json/generate-string body)}))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;http://data.hackthedrive.com/dashboard;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn get-vin-json [pattern vin]
   (get-json (clojure.string/replace pattern #":vin" vin)))
@@ -51,10 +51,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; VEHICLES
 
-;; ## fix
-
 (defn all-vehicles [& {:keys [] :as params}]
-  (get-data "" params))
+  (get-json "" params))
 
 ; (all-vehicles)
 

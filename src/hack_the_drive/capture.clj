@@ -1,46 +1,40 @@
 (ns hack-the-drive.capture
-  (:import [com.mongodb MongoOptions ServerAddress])
-  (:import [org.bson.types ObjectId])
-  (:require [monger.core :as mg]
-            [monger.collection :as mc]
-            [monger.conversion :refer [from-db-object]]
-            [environ.core :refer [env]]))
+  (:require [hack-the-drive.storage :as storage]
+            [hack-the-drive.api.bmwcar :as bmw]))
 
-(def mongolab-uri (env :mongolab-uri))
+(def api-fns [
+ bmw/vehicle 
+ bmw/battery
+ bmw/fuel
+ bmw/door
+ bmw/window
+ bmw/trunk
+ bmw/odometer
+ bmw/location
+ bmw/last-trip])
 
-; (def conn (mg/connect-via-uri  mongolab-uri))
+(defn vehicle-details [vin]
+  (apply merge (map deref (map #(future (try (% vin) (catch Exception e {:error (pr-str e)}))) api-fns))))
 
-; (mg/disconnect conn)
+(defn vehicles []
+  (for [v (bmw/all-vehicles)]
+    (let [d (vehicle-details (:vin v))]
+      (merge v d))))
 
-(defn insert-data [collection value]
-  (let [{conn :conn db :db} (mg/connect-via-uri mongolab-uri)
-        result (mc/insert-and-return db collection value)]
-    (mg/disconnect conn)
-    result))
+; (vehicle-details "WBY1Z4C55EV273078")
+; (vehicle-details "WBY1Z4C53EV273080")
+; (vehicle-details "WBY1Z4C51EV275894")
+; (vehicle-details "WBY1Z4C58EV275200")
+; (map vehicle-details (map :vin (bmw/all-vehicles)))
 
-;; (insert-data "docs2" {:name "John" :age 30})
+; (vehicles)
 
-(defn retrieve-data [collection & [match]]
-  (let [{conn :conn db :db} (mg/connect-via-uri mongolab-uri)
-        object (mc/find-maps db collection (or match {}))
-        result (from-db-object object true)]
-    (mg/disconnect conn)
-    result))
+(defn capture-vehicle [id]
+  (let [data (vehicle-details id)]
+    (storage/insert-data "vehicle-status" data)
+    data))
 
-(defn retrieve-one [collection & [match]]
-  (let [{conn :conn db :db} (mg/connect-via-uri mongolab-uri)
-        object (mc/find-one db collection (or match {}))
-        result (from-db-object object true)]
-    (mg/disconnect conn)
-    result))
+; (capture-vehicle "WBY1Z4C55EV273078")
 
-
-;; (retrieve-data "docs2" {:name "John"})
-
-(defn store-media [file]
-  ; (ds/copy (file :tempfile) (ds/file-str "file.out"))
-  (:_id (insert-data "media" file)))
-
-(defn retrieve-media [id]
-  (retrieve-one "media" {:_id (ObjectId. id)}))
-
+(defn -main [id]
+  (capture-vehicle id))
