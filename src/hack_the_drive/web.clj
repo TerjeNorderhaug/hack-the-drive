@@ -57,13 +57,12 @@
               id (store-media
                   (merge 
                    (vehicle-details (get params "vehicle")) 
-                   (if bytes {:intensity (thermal-intensity (image-from-bytes bytes) 20)})
+                  ; (if bytes {:intensity (thermal-intensity (image-from-bytes bytes) 20)})
                    (assoc content
                           :vehicle (get params "vehicle"))))]
           ; (render (success))
           ; (resp/redirect  (clojure.string/replace "/media/:id" #":id" (str id)))))
-          (if bytes
-            (resp/redirect "/grid")
+           ; (resp/redirect "/grid")
             (str content))))
     {:store (byte-array-store)})
   (GET "/media/:id" [id]
