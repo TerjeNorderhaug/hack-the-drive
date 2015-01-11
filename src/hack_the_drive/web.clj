@@ -11,7 +11,7 @@
             [environ.core :refer [env]]
             [net.cgrand.enlive-html :refer [deftemplate]]
             [hack-the-drive.storage :refer [store-media retrieve-media]]
-            [hack-the-drive.capture :refer [store-media retrieve-media]]))
+            [hack-the-drive.capture :refer [capture-vehicle]]))
 
 (defn splash []
   {:status 200

@@ -36,5 +36,10 @@
 
 ; (capture-vehicle "WBY1Z4C55EV273078")
 
-(defn -main [id]
-  (capture-vehicle id))
+; (count (storage/retrieve-data "vehicle-status"))
+
+(defn -main [& [id]]
+  (if-not id
+    (doseq [id (map :vin (bmw/all-vehicles))]
+      (capture-vehicle id))
+    (capture-vehicle id)))
