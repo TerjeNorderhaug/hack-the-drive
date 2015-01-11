@@ -50,8 +50,9 @@
                                       :vid (:vehicle %))
                             (retrieve-data "media"))
                        (car/all-vehicles))))
-  (mp/wrap-multipart-params
-    (POST "/capture" {params :params} 
+  ; (mp/wrap-multipart-params
+   (fn [request]
+     ((POST "/capture" {params :params} 
         (let [content (get params "image")
               bytes (:bytes bytes)
               id (store-media
@@ -64,7 +65,8 @@
           ; (resp/redirect  (clojure.string/replace "/media/:id" #":id" (str id)))))
            ; (resp/redirect "/grid")
           {:status 200 :headers {"Content-Type" "text/plain"} :body (pr-str params)}))
-     {:store (byte-array-store)})
+       (ring.middleware.multipart-params/multipart-params-request request
+         {:store (byte-array-store)})))
   (GET "/media/:id" [id]
     (render-media-response 
      (retrieve-media id)))
