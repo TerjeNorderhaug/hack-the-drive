@@ -7,6 +7,7 @@
             [ring.middleware [multipart-params :as mp]]
             [ring.middleware.multipart-params.byte-array :refer [byte-array-store]]
             [ring.util.response :as resp]
+            [ring.middleware.params :refer [wrap-params]]
             [monger.util :refer [get-id]]
             [environ.core :refer [env]]
             [hack-the-drive.api.bmwcar :as car]
@@ -51,8 +52,7 @@
                             (retrieve-data "media"))
                        (car/all-vehicles))))
   ; (mp/wrap-multipart-params
-   (fn [request]
-     ((POST "/capture" {params :params} 
+   (-> (POST "/capture" {params :params} 
         (let [content (get params "image")
               bytes (:bytes bytes)
               id (store-media
@@ -65,8 +65,9 @@
           ; (resp/redirect  (clojure.string/replace "/media/:id" #":id" (str id)))))
            ; (resp/redirect "/grid")
           {:status 200 :headers {"Content-Type" "text/plain"} :body (pr-str params)}))
-       (ring.middleware.multipart-params/multipart-params-request request
-         {:store (byte-array-store)})))
+       wrap-params
+       ; (mp/wrap-multipart-params {:store (byte-array-store)})
+       )
   (GET "/media/:id" [id]
     (render-media-response 
      (retrieve-media id)))
