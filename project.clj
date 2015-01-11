@@ -5,7 +5,8 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [compojure "1.1.8"]
-                 [ring/ring-jetty-adapter "1.2.2"]
+                 [ring "1.3.1"]
+                 ; [ring/ring-jetty-adapter "1.2.2"]
                  [environ "0.5.0"]
 		 [clj-http "1.0.0"]	  
                  [cheshire "5.3.1"]
@@ -18,6 +19,7 @@
   :hooks [environ.leiningen.hooks]
   :min-lein-version "2.0.0"
   :uberjar-name "hack-the-drive.jar"
+  :ring {:handler hack-the-drive.web/app}
   :profiles {:production {:env {:production true}}}
 )
 

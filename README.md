@@ -5,6 +5,14 @@ http://docs.hackthedrive.com/
 
 ## Usage
 
+Assuming you have leiningen installed, download the repository:
+
+    $ git clone https://github.com/TerjeNorderhaug/hack-the-drive.git
+    $ cd hack-the-drive
+
+Open a local server:
+
+    $ lein ring server
 
 ## Quick Start
 
