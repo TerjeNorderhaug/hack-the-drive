@@ -34,13 +34,22 @@
     (mg/disconnect conn)
     result))
 
+(defn delete-one [coll id]
+  (let [{conn :conn db :db} (mg/connect-via-uri mongolab-uri)]
+    (mc/remove-by-id db coll (ObjectId. id))))
 
 ;; (retrieve-data "docs2" {:name "John"})
 
-(defn store-media [file]
+(defn store-media [object]
   ; (ds/copy (file :tempfile) (ds/file-str "file.out"))
-  (:_id (insert-data "media" file)))
+  (:_id (insert-data "media" object)))
 
 (defn retrieve-media [id]
   (retrieve-one "media" {:_id (ObjectId. id)}))
+
+(defn all-media []
+  (retrieve-data "media"))
+
+; (all-media)
+; (delete-one "media" "54b204510364f106085658de")
 

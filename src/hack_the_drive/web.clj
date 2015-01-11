@@ -9,9 +9,12 @@
             [ring.util.response :as resp]
             [monger.util :refer [get-id]]
             [environ.core :refer [env]]
-            [net.cgrand.enlive-html :refer [deftemplate]]
-            [hack-the-drive.storage :refer [store-media retrieve-media]]
-            [hack-the-drive.capture :refer [capture-vehicle]]))
+            [hack-the-drive.api.bmwcar :as car]
+            [hack-the-drive.view.views :refer [index-view watch-view]]
+            [hack-the-drive.storage :as storage :refer [store-media retrieve-media retrieve-data]]
+            [hack-the-drive.capture :refer [capture-vehicle vehicle-details]]
+            [hack-the-drive.view.grid :refer [grid-view]]
+            [hack-the-drive.thermal :refer [thermal-intensity image-from-bytes]]))
 
 (defn splash []
   {:status 200
@@ -20,12 +23,6 @@
 
 (defn render [t]
   (apply str t))
-
-(deftemplate index "capture.html" [])
-
-(deftemplate upload-success "success.html" [])
-
-(deftemplate watch-demo "watch.html" [])
 
 (defn render-media-response [record]
     (-> (resp/response (new java.io.ByteArrayInputStream (:bytes record))) ; (java.io.ByteArrayInputStream. 
@@ -40,14 +37,26 @@
 
 (defroutes app
   (GET  "/" [] 
-    (render (index)))
+    (render (index-view)))
   (GET "/watch" [] 
-    (render (watch-demo)))
+    (render (watch-view)))
+  (GET "/grid" []
+    (render (grid-view (map #(assoc % :img (str "/media/" (:_id %))
+                                      :vid (:vehicle %))
+                            (retrieve-data "media"))
+                       (car/all-vehicles))))
   (mp/wrap-multipart-params
     (POST "/capture" {params :params} 
-        (let [id (store-media (get params "file"))]
-          ; (render (upload-success))
-          (resp/redirect (clojure.string/replace "/media/:id" #":id" (str id)))))
+        (let [content (get params "file")
+              id (store-media
+                  (merge 
+                   (vehicle-details (get params "vehicle"))
+                   {:intensity (thermal-intensity (image-from-bytes (:bytes content)) 20)}
+                   (assoc content
+                          :vehicle (get params "vehicle"))))]
+          ; (render (success))
+          ; (resp/redirect  (clojure.string/replace "/media/:id" #":id" (str id)))))
+          (resp/redirect "/grid")))
     {:store (byte-array-store)})
   (GET "/media/:id" [id]
     (render-media-response 
