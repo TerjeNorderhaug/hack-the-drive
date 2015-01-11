@@ -47,8 +47,6 @@
   (GET "/media/:id" [id]
     (render-media-response 
      (retrieve-media id)))
-  (GET "/vehicle/:id/capture" [id]
-     (capture-vehicle id))
   (ANY "*" []
        (route/not-found (slurp (io/resource "404.html")))))
 
