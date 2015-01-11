@@ -1,4 +1,5 @@
 (ns hack-the-drive.web
+  (:import org.apache.commons.io.IOUtils)
   (:require [compojure.core :refer [defroutes GET PUT POST DELETE ANY]]
             [compojure.handler :refer [site]]
             [compojure.route :as route]
@@ -54,7 +55,8 @@
   (mp/wrap-multipart-params
      (POST "/capture" {params :params} 
         (let [content (get params "image")
-              bytes (:bytes bytes)
+              bytes (or (:bytes content)
+                        (IOUtils/toByteArray (io/input-stream (:tempfile content))))
               id (store-media
                   (merge 
                    (vehicle-details (get params "vehicle")) 
